@@ -23,7 +23,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-
 // ✅ DELETE student
 router.delete('/:id', async (req, res) => {
   try {
@@ -33,5 +32,7 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json(err);
   }
 });
+
+router.put("/:id", updateStudent);
 
 module.exports = router;

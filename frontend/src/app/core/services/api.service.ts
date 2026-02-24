@@ -20,4 +20,8 @@ export class ApiService {
   deleteStudent(id:string){
     return this.http.delete(`${this.baseUrl}/${id}`);
   }
+  
+updateStudent(id: string, data: any){
+  return this.http.put(`${this.baseUrl}/${id}`, data);
+}
 }

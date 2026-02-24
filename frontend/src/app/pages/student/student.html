@@ -3,7 +3,10 @@
 <input [(ngModel)]="newStudent.name" placeholder="Name">
 <input [(ngModel)]="newStudent.email" placeholder="Email">
 <input [(ngModel)]="newStudent.course" placeholder="Course">
-<button (click)="addStudent()">Add</button>
+
+<button *ngIf="!editMode" (click)="addStudent()">Add</button>
+<button *ngIf="editMode" (click)="updateStudent()">Update</button>
+<button *ngIf="editMode" (click)="cancelEdit()">Cancel</button>
 
 <h2>Students List</h2>
 
@@ -20,6 +23,7 @@
     <td>{{s.email}}</td>
     <td>{{s.course}}</td>
     <td>
+      <button (click)="startEdit(s)">Edit</button>
       <button (click)="deleteStudent(s._id)">Delete</button>
     </td>
   </tr>

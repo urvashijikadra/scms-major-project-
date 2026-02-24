@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ApiService } from '../../core/services/api.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../core/services/api.service';
 
 @Component({
   selector: 'app-student',
@@ -14,11 +14,10 @@ export class StudentComponent implements OnInit {
 
   students: any[] = [];
 
-  newStudent = {
-    name: '',
-    email: '',
-    course: ''
-  };
+  newStudent = { name: '', email: '', course: '' };
+
+  editMode = false;
+  editStudentId: string | null = null;
 
   constructor(private api: ApiService) {}
 
@@ -26,47 +25,62 @@ export class StudentComponent implements OnInit {
     this.loadStudents();
   }
 
-  // ✅ LOAD STUDENTS
   loadStudents() {
-    this.api.getStudents().subscribe({
-      next: (res: any) => {
-        // remove blank students if any
-        this.students = res.filter(
-          (s: any) => s.name || s.email || s.course
-        );
-      },
-      error: (err: any) => console.error(err)
+    this.api.getStudents().subscribe((res: any) => {
+      this.students = res;
     });
   }
 
-  // ✅ ADD STUDENT WITH VALIDATION
+  // ➕ ADD
   addStudent() {
-
     if (!this.newStudent.name || !this.newStudent.email || !this.newStudent.course) {
-      alert("Please fill all fields ❌");
+      alert("Fill all fields ❌");
       return;
     }
 
-    this.api.addStudent(this.newStudent).subscribe({
-      next: () => {
-        alert('Student Added ✅');
-        this.newStudent = { name: '', email: '', course: '' };
-        this.loadStudents();
-      },
-      error: (err: any) => console.error(err)
+    this.api.addStudent(this.newStudent).subscribe(() => {
+      alert("Student Added ✅");
+      this.newStudent = { name: '', email: '', course: '' };
+      this.loadStudents();
     });
   }
 
-  // ✅ DELETE STUDENT
+  // ❌ DELETE
   deleteStudent(id: string) {
-    if (confirm('Delete student?')) {
-      this.api.deleteStudent(id).subscribe({
-        next: () => {
-          alert('Student Deleted ❌');
-          this.loadStudents();
-        },
-        error: (err: any) => console.error(err)
+    this.api.deleteStudent(id).subscribe(() => {
+      alert("Deleted ❌");
+      this.loadStudents();
+    });
+  }
+
+  // ✏️ START EDIT
+  startEdit(student: any) {
+    this.editMode = true;
+    this.editStudentId = student._id;
+
+    this.newStudent = {
+      name: student.name,
+      email: student.email,
+      course: student.course
+    };
+  }
+
+  // ✅ UPDATE
+  updateStudent() {
+    if (!this.editStudentId) return;
+
+    this.api.updateStudent(this.editStudentId, this.newStudent)
+      .subscribe(() => {
+        alert("Student Updated ✅");
+        this.editMode = false;
+        this.editStudentId = null;
+        this.newStudent = { name: '', email: '', course: '' };
+        this.loadStudents();
       });
-    }
+  }
+
+  cancelEdit() {
+    this.editMode = false;
+    this.newStudent = { name: '', email: '', course: '' };
   }
 }
