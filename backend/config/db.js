@@ -1,12 +1,11 @@
-const mongoose = require("mongoose");
+const { Sequelize } = require('sequelize');
+const path = require('path');
 
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URL);
-    console.log("MongoDB Connected ✅");
-  } catch (err) {
-    console.log("Mongo Error ❌", err.message);
-  }
-};
+// Create SQLite database
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: path.join(__dirname, '..', 'scms.db'),
+  logging: false
+});
 
-module.exports = connectDB;
+module.exports = sequelize;

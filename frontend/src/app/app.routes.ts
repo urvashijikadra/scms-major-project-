@@ -7,6 +7,7 @@ import { Faculty } from './pages/faculty/faculty';
 import { Notice } from './pages/notice/notice';
 import { Attendance } from './pages/attendance/attendance';
 import { Fees } from './pages/fees/fees';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
 
@@ -15,15 +16,47 @@ export const routes: Routes = [
 
   { path: 'login', component: Login, title: 'Login' },
 
-  // After login → Dashboard
-  { path: 'dashboard', component: DashboardComponent, title: 'Dashboard' },
+  // Protected Routes - Admin
+  { 
+    path: 'dashboard', 
+    component: DashboardComponent, 
+    title: 'Dashboard',
+    canActivate: [AuthGuard],
+    data: { role: 'admin' }
+  },
 
-  // Other pages
-  { path: 'student', component: StudentComponent, title: 'Student' },
-  { path: 'faculty', component: Faculty, title: 'Faculty' },
-  { path: 'notice', component: Notice, title: 'Notice' },
-  { path: 'attendance', component: Attendance, title: 'Attendance' },
-  { path: 'fees', component: Fees, title: 'Fees' },
+  { 
+    path: 'student', 
+    component: StudentComponent, 
+    title: 'Student',
+    canActivate: [AuthGuard],
+    data: { role: 'admin' }
+  },
+  { 
+    path: 'faculty', 
+    component: Faculty, 
+    title: 'Faculty',
+    canActivate: [AuthGuard],
+    data: { role: 'admin' }
+  },
+  { 
+    path: 'notice', 
+    component: Notice, 
+    title: 'Notice',
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'attendance', 
+    component: Attendance, 
+    title: 'Attendance',
+    canActivate: [AuthGuard]
+  },
+  { 
+    path: 'fees', 
+    component: Fees, 
+    title: 'Fees',
+    canActivate: [AuthGuard]
+  },
 
   // If wrong URL
   { path: '**', redirectTo: 'login' }

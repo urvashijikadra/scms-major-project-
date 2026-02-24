@@ -1,1 +1,109 @@
-<p>login works!</p>
+  <div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1>🎓 Smart Campus</h1>
+      <p>Management System</p>
+    </div>
+    
+    <!-- Login Form -->
+    <form *ngIf="!isSignUp" (ngSubmit)="onLogin()" class="login-form">
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="email" 
+          name="email" 
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          [(ngModel)]="password" 
+          name="password" 
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <div class="error-message" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <button type="submit" class="login-btn" [disabled]="loading">
+        <span *ngIf="!loading">Login</span>
+        <span *ngIf="loading">Logging in...</span>
+      </button>
+    </form>
+
+    <!-- Sign Up Form -->
+    <form *ngIf="isSignUp" (ngSubmit)="onSignUp()" class="login-form">
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input 
+          type="text" 
+          id="name" 
+          [(ngModel)]="name" 
+          name="name" 
+          placeholder="Enter your full name"
+          required
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input 
+          type="email" 
+          id="email" 
+          [(ngModel)]="email" 
+          name="email" 
+          placeholder="Enter your email"
+          required
+        />
+      </div>
+      
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password" 
+          [(ngModel)]="password" 
+          name="password" 
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <div class="error-message" *ngIf="error">
+        {{ error }}
+      </div>
+
+      <div class="success-message" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+
+      <button type="submit" class="login-btn" [disabled]="loading">
+        <span *ngIf="!loading">Sign Up</span>
+        <span *ngIf="loading">Creating account...</span>
+      </button>
+    </form>
+
+    <!-- Toggle between Login and Sign Up -->
+    <div class="login-footer">
+      <p *ngIf="!isSignUp">Don't have an account? 
+        <a href="javascript:void(0)" (click)="toggleMode()">Sign Up</a>
+      </p>
+      <p *ngIf="isSignUp">Already have an account? 
+        <a href="javascript:void(0)" (click)="toggleMode()">Login</a>
+      </p>
+      <p *ngIf="!isSignUp" class="demo-info">Demo Credentials:</p>
+      <p *ngIf="!isSignUp"><strong>Admin:</strong> admin&#64;scms.com / admin123</p>
+      <p *ngIf="!isSignUp"><strong>User:</strong> user&#64;scms.com / user123</p>
+    </div>
+  </div>
+</div>
