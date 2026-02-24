@@ -1,0 +1,26 @@
+<h2>Add Student</h2>
+
+<input [(ngModel)]="newStudent.name" placeholder="Name">
+<input [(ngModel)]="newStudent.email" placeholder="Email">
+<input [(ngModel)]="newStudent.course" placeholder="Course">
+<button (click)="addStudent()">Add</button>
+
+<h2>Students List</h2>
+
+<table border="1">
+  <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Course</th>
+    <th>Action</th>
+  </tr>
+
+  <tr *ngFor="let s of students">
+    <td>{{s.name}}</td>
+    <td>{{s.email}}</td>
+    <td>{{s.course}}</td>
+    <td>
+      <button (click)="deleteStudent(s._id)">Delete</button>
+    </td>
+  </tr>
+</table>

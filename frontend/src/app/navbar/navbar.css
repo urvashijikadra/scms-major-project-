@@ -1,0 +1,31 @@
+.glass-navbar {
+  background: rgba(0, 0, 50, 0.7);
+  backdrop-filter: blur(10px);
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+
+.nav-link {
+  position: relative;
+  margin: 0 10px;
+  font-weight: 500;
+}
+
+.nav-link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0%;
+  height: 2px;
+  background: #00ffff;
+  transition: 0.3s;
+}
+
+.nav-link:hover::after {
+  width: 100%;
+}
+
+body.dark-mode {
+  background: #121212;
+  color: white;
+}
