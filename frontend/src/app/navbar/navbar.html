@@ -13,39 +13,30 @@
 
     <!-- Profile + Dropdown -->
     <div class="panel-container" *ngIf="user">
-      
-      <!-- Profile Button -->
+
+      <!-- ✅ Profile Button ONLY ICON -->
       <button class="btn profile-btn ms-3"
         (click)="togglePanel(); $event.stopPropagation()">
         <span class="profile-icon">👤</span>
-        <span class="profile-name">{{ user?.name }}</span>
       </button>
 
       <!-- Profile Dropdown -->
       <div class="profile-dropdown" [class.open]="isPanelOpen">
-        
-        <!-- Header -->
-        <div class="profile-header">
-          <div class="profile-avatar">👤</div>
-          <div class="profile-info">
-            <span class="profile-name-text">{{ user?.name }}</span>
-            <span class="profile-role">
-              {{ user?.role | titlecase }}
-            </span>
-          </div>
+
+        <!-- ✅ Header ONLY ICON -->
+        <div class="profile-header text-center">
+          <div class="profile">Admin</div>
         </div>
 
         <!-- Menu Items -->
         <div class="profile-menu">
 
-          <!-- Dashboard -->
           <a routerLink="/dashboard"
              class="profile-item"
              (click)="isPanelOpen = false">
             🏠 Dashboard
           </a>
 
-          <!-- ADMIN ONLY PAGES -->
           <a *ngIf="user?.role === 'admin'"
              routerLink="/students"
              class="profile-item"
@@ -74,9 +65,16 @@
             📅 Attendance
           </a>
 
+          <!-- ✅ Fees Page -->
+          <a *ngIf="user?.role === 'admin'"
+             routerLink="/fees"
+             class="profile-item"
+             (click)="isPanelOpen = false">
+            💰 Fees
+          </a>
+
           <hr />
 
-          <!-- Logout -->
           <a class="profile-item logout"
              (click)="logout()">
             🚪 Logout

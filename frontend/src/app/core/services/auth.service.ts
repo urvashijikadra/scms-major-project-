@@ -1,81 +1,50 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
-import { Observable, tap } from 'rxjs';
-
-export interface User {
-  id: string;
-  email: string;
-  name: string;
-  role: 'admin' | 'user';
-}
-
-export interface LoginResponse {
-  success: boolean;
-  token: string;
-  user: User;
-}
+import { tap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:5000/auth';
-  currentUser = signal<User | null>(null);
 
-  constructor(private http: HttpClient, private router: Router) {
-    this.loadUserFromStorage();
-  }
+  private baseUrl = 'http://localhost:5000/auth';
 
-  private loadUserFromStorage() {
-    const token = localStorage.getItem('token');
-    const user = localStorage.getItem('user');
-    if (token && user) {
-      this.currentUser.set(JSON.parse(user));
-    }
-  }
+  constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<LoginResponse> {
-    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { email, password })
+  // ✅ LOGIN
+  login(email: string, password: string){
+    return this.http.post<any>(`${this.baseUrl}/login`, { email, password })
       .pipe(
-        tap(response => {
-          if (response.success) {
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('user', JSON.stringify(response.user));
-            this.currentUser.set(response.user);
+        tap(res => {
+          if(res.success){
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('user', JSON.stringify(res.user));
           }
         })
       );
   }
 
-  register(email: string, password: string, name: string, role: string): Observable<{ success: boolean; message: string }> {
-    return this.http.post<{ success: boolean; message: string }>(`${this.apiUrl}/register`, { email, password, name, role });
+  // ✅ REGISTER
+  register(email:string, password:string, name:string, role:string){
+    return this.http.post<any>(`${this.baseUrl}/register`,
+      { email, password, name, role }
+    );
   }
 
-  logout() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this.currentUser.set(null);
-    this.router.navigate(['/login']);
-  }
-
+  // ✅ CHECK LOGIN
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  // ✅ GET USER
+  getUser(){
+    const user = localStorage.getItem('user');
+    return user ? JSON.parse(user) : null;
   }
 
-  getUser(): User | null {
-    return this.currentUser();
-  }
-
-  isAdmin(): boolean {
-    return this.currentUser()?.role === 'admin';
-  }
-
-  isUser(): boolean {
-    return this.currentUser()?.role === 'user';
+  // ✅ LOGOUT
+  logout(){
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
   }
 }
