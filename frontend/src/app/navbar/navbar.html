@@ -10,29 +10,81 @@
   </button>
 
   <div class="collapse navbar-collapse justify-content-end" id="navMenu">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a routerLink="/dashboard" class="nav-link">Dashboard</a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="/student" class="nav-link">Student</a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="/faculty" class="nav-link">Faculty</a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="/notice" class="nav-link">Notice</a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="/attendance" class="nav-link">Attendance</a>
-      </li>
-      <li class="nav-item">
-        <a routerLink="/fees" class="nav-link">Fees</a>
-      </li>
-    </ul>
 
-    <button class="btn btn-outline-light ms-3" (click)="toggleDarkMode()">
-      🌙
-    </button>
+    <!-- Profile + Dropdown -->
+    <div class="panel-container" *ngIf="user">
+      
+      <!-- Profile Button -->
+      <button class="btn profile-btn ms-3"
+        (click)="togglePanel(); $event.stopPropagation()">
+        <span class="profile-icon">👤</span>
+        <span class="profile-name">{{ user?.name }}</span>
+      </button>
+
+      <!-- Profile Dropdown -->
+      <div class="profile-dropdown" [class.open]="isPanelOpen">
+        
+        <!-- Header -->
+        <div class="profile-header">
+          <div class="profile-avatar">👤</div>
+          <div class="profile-info">
+            <span class="profile-name-text">{{ user?.name }}</span>
+            <span class="profile-role">
+              {{ user?.role | titlecase }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Menu Items -->
+        <div class="profile-menu">
+
+          <!-- Dashboard -->
+          <a routerLink="/dashboard"
+             class="profile-item"
+             (click)="isPanelOpen = false">
+            🏠 Dashboard
+          </a>
+
+          <!-- ADMIN ONLY PAGES -->
+          <a *ngIf="user?.role === 'admin'"
+             routerLink="/students"
+             class="profile-item"
+             (click)="isPanelOpen = false">
+            🎓 Students
+          </a>
+
+          <a *ngIf="user?.role === 'admin'"
+             routerLink="/faculty"
+             class="profile-item"
+             (click)="isPanelOpen = false">
+            👨‍🏫 Faculty
+          </a>
+
+          <a *ngIf="user?.role === 'admin'"
+             routerLink="/notices"
+             class="profile-item"
+             (click)="isPanelOpen = false">
+            📢 Notices
+          </a>
+
+          <a *ngIf="user?.role === 'admin'"
+             routerLink="/attendance"
+             class="profile-item"
+             (click)="isPanelOpen = false">
+            📅 Attendance
+          </a>
+
+          <hr />
+
+          <!-- Logout -->
+          <a class="profile-item logout"
+             (click)="logout()">
+            🚪 Logout
+          </a>
+
+        </div>
+      </div>
+    </div>
+
   </div>
 </nav>
