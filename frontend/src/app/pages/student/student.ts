@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { ApiService } from '../../core/services/api.service';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -10,77 +9,79 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './student.html',
   styleUrls: ['./student.css']
 })
-export class StudentComponent implements OnInit {
+export class StudentComponent {
 
-  students: any[] = [];
+  // Student List
+  students: any[] = [
+    { id: 1, name: 'Rahul Patel', course: 'BCA', year: '3rd Year', attendance: 85, fees: 'Paid' },
+    { id: 2, name: 'Priya Shah', course: 'BBA', year: '2nd Year', attendance: 78, fees: 'Pending' }
+  ];
 
-  newStudent = { name: '', email: '', course: '' };
+  // Modal control
+  showModal = false;
+  isEdit = false;
 
-  editMode = false;
-  editStudentId: string | null = null;
+  currentStudent: any = this.emptyStudent();
 
-  constructor(private api: ApiService) {}
-
-  ngOnInit() {
-    this.loadStudents();
+  // ----------------------
+  // OPEN ADD FORM
+  // ----------------------
+  openAdd() {
+    this.isEdit = false;
+    this.currentStudent = this.emptyStudent();
+    this.showModal = true;
   }
 
-  loadStudents() {
-    this.api.getStudents().subscribe((res: any) => {
-      this.students = res;
-    });
-  }
+  // ----------------------
+  // SAVE STUDENT
+  // ----------------------
+  saveStudent() {
 
-  // ➕ ADD
-  addStudent() {
-    if (!this.newStudent.name || !this.newStudent.email || !this.newStudent.course) {
-      alert("Fill all fields ❌");
+    if (!this.currentStudent.name) {
+      alert("Name required");
       return;
     }
 
-    this.api.addStudent(this.newStudent).subscribe(() => {
-      alert("Student Added ✅");
-      this.newStudent = { name: '', email: '', course: '' };
-      this.loadStudents();
-    });
+    if (this.isEdit) {
+      // update
+      const index = this.students.findIndex(s => s.id === this.currentStudent.id);
+      this.students[index] = this.currentStudent;
+    } else {
+      // add new
+      this.currentStudent.id = this.students.length + 1;
+      this.students.push({ ...this.currentStudent });
+    }
+
+    this.showModal = false;
   }
 
-  // ❌ DELETE
-  deleteStudent(id: string) {
-    this.api.deleteStudent(id).subscribe(() => {
-      alert("Deleted ❌");
-      this.loadStudents();
-    });
+  // ----------------------
+  // DELETE
+  // ----------------------
+  deleteStudent(id: number) {
+    this.students = this.students.filter(s => s.id !== id);
   }
 
-  // ✏️ START EDIT
-  startEdit(student: any) {
-    this.editMode = true;
-    this.editStudentId = student._id;
+  // ----------------------
+  // EDIT
+  // ----------------------
+  editStudent(student: any) {
+    this.isEdit = true;
+    this.currentStudent = { ...student };
+    this.showModal = true;
+  }
 
-    this.newStudent = {
-      name: student.name,
-      email: student.email,
-      course: student.course
+  // ----------------------
+  // EMPTY STUDENT
+  // ----------------------
+  emptyStudent() {
+    return {
+      id: 0,
+      name: '',
+      course: '',
+      year: '',
+      attendance: 0,
+      fees: ''
     };
-  }
-
-  // ✅ UPDATE
-  updateStudent() {
-    if (!this.editStudentId) return;
-
-    this.api.updateStudent(this.editStudentId, this.newStudent)
-      .subscribe(() => {
-        alert("Student Updated ✅");
-        this.editMode = false;
-        this.editStudentId = null;
-        this.newStudent = { name: '', email: '', course: '' };
-        this.loadStudents();
-      });
-  }
-
-  cancelEdit() {
-    this.editMode = false;
-    this.newStudent = { name: '', email: '', course: '' };
   }
 }

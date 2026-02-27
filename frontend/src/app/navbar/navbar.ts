@@ -1,17 +1,17 @@
 import { Component, HostListener, inject } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { TitleCasePipe } from '@angular/common';
 import { AuthService } from '../core/services/auth.service';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule, TitleCasePipe],
+  imports: [RouterModule, CommonModule],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
 export class NavbarComponent {
+
   isPanelOpen = false;
   authService = inject(AuthService);
   router = inject(Router);
@@ -20,16 +20,14 @@ export class NavbarComponent {
     return this.authService.getUser();
   }
 
-  toggleDarkMode() {
-    document.body.classList.toggle('dark-mode');
-  }
-
   togglePanel() {
     this.isPanelOpen = !this.isPanelOpen;
   }
 
-  logout() {
+  // ✅ Confirm Logout from popup
+  confirmLogout() {
     this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
   @HostListener('document:click', ['$event'])

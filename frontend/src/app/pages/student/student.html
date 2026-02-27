@@ -1,30 +1,58 @@
-<h2>Add Student</h2>
+<div class="student-page">
 
-<input [(ngModel)]="newStudent.name" placeholder="Name">
-<input [(ngModel)]="newStudent.email" placeholder="Email">
-<input [(ngModel)]="newStudent.course" placeholder="Course">
+  <div class="top-bar">
+    <h2>🎓 Student Management</h2>
+    <button class="add-btn" (click)="openAdd()">+ Add Student</button>
+  </div>
 
-<button *ngIf="!editMode" (click)="addStudent()">Add</button>
-<button *ngIf="editMode" (click)="updateStudent()">Update</button>
-<button *ngIf="editMode" (click)="cancelEdit()">Cancel</button>
+  <div class="table-container">
+    <table>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Course</th>
+        <th>Year</th>
+        <th>Attendance</th>
+        <th>Fees</th>
+        <th>Action</th>
+      </tr>
 
-<h2>Students List</h2>
+      <tr *ngFor="let s of students">
+        <td>{{s.id}}</td>
+        <td>{{s.name}}</td>
+        <td>{{s.course}}</td>
+        <td>{{s.year}}</td>
+        <td>{{s.attendance}}%</td>
+        <td>{{s.fees}}</td>
+        <td>
+          <button class="edit-btn" (click)="editStudent(s)">Edit</button>
+          <button class="delete-btn" (click)="deleteStudent(s.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </div>
 
-<table border="1">
-  <tr>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Course</th>
-    <th>Action</th>
-  </tr>
+</div>
 
-  <tr *ngFor="let s of students">
-    <td>{{s.name}}</td>
-    <td>{{s.email}}</td>
-    <td>{{s.course}}</td>
-    <td>
-      <button (click)="startEdit(s)">Edit</button>
-      <button (click)="deleteStudent(s._id)">Delete</button>
-    </td>
-  </tr>
-</table>
+<!-- MODAL -->
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal-box">
+    <h3>{{isEdit ? 'Edit Student' : 'Add Student'}}</h3>
+
+    <input placeholder="Name" [(ngModel)]="currentStudent.name">
+    <input placeholder="Course" [(ngModel)]="currentStudent.course">
+    <input placeholder="Year" [(ngModel)]="currentStudent.year">
+    <input type="number" placeholder="Attendance" [(ngModel)]="currentStudent.attendance">
+
+    <select [(ngModel)]="currentStudent.fees">
+      <option value="">Fees</option>
+      <option>Paid</option>
+      <option>Pending</option>
+    </select>
+
+    <div class="modal-actions">
+      <button class="save-btn" (click)="saveStudent()">Save</button>
+      <button class="cancel-btn" (click)="showModal=false">Cancel</button>
+    </div>
+  </div>
+</div>

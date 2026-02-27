@@ -1,1 +1,135 @@
-<p>dashboard works!</p>
+<div class="dashboard container-fluid p-4">
+
+  <!-- WELCOME MESSAGE -->
+  <div class="welcome-section mb-4">
+    <h1 class="welcome-text">Welcome, Admin 👋</h1>
+    <p class="date-text">Today is {{ currentDate }}</p>
+  </div>
+
+  <!-- TOP CARDS - 6 Cards -->
+  <div class="row g-3 mb-4">
+
+    <div class="col-md-2">
+      <div class="card stat-card students">
+        <div class="card-icon">👨‍🎓</div>
+        <h5>My Student</h5>
+        <h2>{{ totalStudents }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card stat-card faculty">
+        <div class="card-icon">👨‍🏫</div>
+        <h5>Faculty</h5>
+        <h2>{{ totalFaculty }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card stat-card notices">
+        <div class="card-icon">📢</div>
+        <h5>Notice</h5>
+        <h2>{{ totalNotices }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card stat-card fees">
+        <div class="card-icon">💰</div>
+        <h5>Pending Fees</h5>
+        <h2>₹{{ pendingFees | number }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card stat-card collection">
+        <div class="card-icon">✅</div>
+        <h5>Total Collected</h5>
+        <h2>₹{{ totalCollected | number }}</h2>
+      </div>
+    </div>
+
+    <div class="col-md-2">
+      <div class="card stat-card syllabus">
+        <div class="card-icon">📚</div>
+        <h5>Syllabus</h5>
+        <h2>{{ totalSyllabus }}</h2>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- QUICK ACTION BUTTONS -->
+  <div class="row g-3 mb-4">
+    <div class="col-12">
+      <div class="quick-actions">
+        <button class="action-btn" routerLink="/students">
+          <span class="action-icon">➕</span> Add Student
+        </button>
+        <button class="action-btn" routerLink="/notices">
+          <span class="action-icon">📢</span> Add Notice
+        </button>
+        <button class="action-btn" routerLink="/attendance">
+          <span class="action-icon">📅</span> Mark Attendance
+        </button>
+        <button class="action-btn" routerLink="/fees">
+          <span class="action-icon">💰</span> Manage Fees
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- CHARTS - Medium Size -->
+  <div class="row g-4 mb-4">
+
+    <div class="col-md-6">
+      <div class="card chart-card">
+        <h5>📊 Attendance Overview</h5>
+        <div class="chart-container">
+          <canvas id="attendanceChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card chart-card">
+        <h5>💰 Fees Collection</h5>
+        <div class="chart-container">
+          <canvas id="feesChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+  <!-- RECENT ACTIVITY -->
+  <div class="row g-4">
+
+    <div class="col-md-6">
+      <div class="card activity-card">
+        <h5>📢 Latest Notices</h5>
+        <ul>
+          <li>Exam schedule released</li>
+          <li>Holiday on Friday</li>
+          <li>Workshop registration open</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card activity-card">
+        <h5>👨‍🎓 Recently Added Students</h5>
+        <ul>
+          <li>Rahul Patel</li>
+          <li>Neha Shah</li>
+          <li>Amit Kumar</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+</div>

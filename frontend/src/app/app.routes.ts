@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-
 import { Login } from './pages/login/login';
 import { DashboardComponent } from './pages/dashboard/dashboard';
 import { StudentComponent } from './pages/student/student';
@@ -7,57 +6,60 @@ import { Faculty } from './pages/faculty/faculty';
 import { Notice } from './pages/notice/notice';
 import { Attendance } from './pages/attendance/attendance';
 import { Fees } from './pages/fees/fees';
+
 import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
 
-  // Default page → Login
+  // 👉 Default Page = Login
   { path: '', redirectTo: 'login', pathMatch: 'full' },
 
-  { path: 'login', component: Login, title: 'Login' },
+  // 👉 Login Page
+  { path: 'login', component: Login },
 
-  // Protected Routes - Admin
-  { 
-    path: 'dashboard', 
-    component: DashboardComponent, 
-    title: 'Dashboard',
-    canActivate: [AuthGuard],
-    data: { role: 'admin' }
-  },
-
-  { 
-    path: 'student', 
-    component: StudentComponent, 
-    title: 'Student',
-    canActivate: [AuthGuard],
-    data: { role: 'admin' }
-  },
-  { 
-    path: 'faculty', 
-    component: Faculty, 
-    title: 'Faculty',
-    canActivate: [AuthGuard],
-    data: { role: 'admin' }
-  },
-  { 
-    path: 'notice', 
-    component: Notice, 
-    title: 'Notice',
-    canActivate: [AuthGuard]
-  },
-  { 
-    path: 'attendance', 
-    component: Attendance, 
-    title: 'Attendance',
-    canActivate: [AuthGuard]
-  },
-  { 
-    path: 'fees', 
-    component: Fees, 
-    title: 'Fees',
+  // 👉 Dashboard
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
     canActivate: [AuthGuard]
   },
 
-  // If wrong URL
+  // 👉 Student Page
+  {
+    path: 'students',
+    component: StudentComponent,
+    canActivate: [AuthGuard]
+  },
+
+  // 👉 Faculty Page
+  {
+    path: 'faculty',
+    component: Faculty,
+    canActivate: [AuthGuard]
+  },
+
+  // 👉 Notice Page
+  {
+    path: 'notices',
+    component: Notice,
+    canActivate: [AuthGuard]
+  },
+
+  // 👉 Attendance Page
+  {
+    path: 'attendance',
+    component: Attendance,
+    canActivate: [AuthGuard]
+  },
+
+  // 👉 Fees Page
+  {
+    path: 'fees',
+    component: Fees,
+    canActivate: [AuthGuard]
+  },
+
+  // 👉 Wrong URL → Login
   { path: '**', redirectTo: 'login' }
+
 ];

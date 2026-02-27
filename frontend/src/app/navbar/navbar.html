@@ -38,13 +38,6 @@
           </a>
 
           <a *ngIf="user?.role === 'admin'"
-             routerLink="/students"
-             class="profile-item"
-             (click)="isPanelOpen = false">
-            🎓 Students
-          </a>
-
-          <a *ngIf="user?.role === 'admin'"
              routerLink="/faculty"
              class="profile-item"
              (click)="isPanelOpen = false">
@@ -57,7 +50,13 @@
              (click)="isPanelOpen = false">
             📢 Notices
           </a>
-
+          <a *ngIf="user?.role === 'admin'"
+             routerLink="/students"
+             class="profile-item"
+             (click)="isPanelOpen = false">
+            🎓 Students
+          </a>
+          
           <a *ngIf="user?.role === 'admin'"
              routerLink="/attendance"
              class="profile-item"
@@ -75,10 +74,11 @@
 
           <hr />
 
-          <a class="profile-item logout"
-             (click)="logout()">
-            🚪 Logout
-          </a>
+         <a class="profile-item logout"
+   data-bs-toggle="modal"
+   data-bs-target="#logoutModal">
+   🚪 Logout
+</a>
 
         </div>
       </div>

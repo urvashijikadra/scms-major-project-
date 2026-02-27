@@ -140,3 +140,17 @@ body.dark-mode {
   background: #121212;
   color: white;
 }
+
+.modal {
+  z-index: 9999 !important;
+}
+
+.profile-dropdown {
+  z-index: 1000;
+}
+.modal {
+  z-index: 2000 !important;
+}
+.glass-navbar {
+  z-index: 1000;
+}

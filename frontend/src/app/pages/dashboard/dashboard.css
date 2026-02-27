@@ -1,0 +1,114 @@
+.dashboard {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0f172a, #1e3a8a);
+}
+
+.card {
+  border-radius: 18px;
+  padding: 20px;
+  color: white;
+  border: none;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+/* Welcome Section */
+.welcome-section {
+  background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+  padding: 25px;
+  border-radius: 18px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+}
+
+.welcome-text {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.date-text {
+  font-size: 16px;
+  opacity: 0.9;
+  color: #cbd5e1;
+}
+
+/* Stat Cards */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card h5 {
+  opacity: 0.8;
+  font-size: 14px;
+}
+
+.stat-card h2 {
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* Bigger Icons */
+.card-icon {
+  font-size: 40px;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.students { background: linear-gradient(45deg,#4facfe,#00f2fe); }
+.faculty { background: linear-gradient(45deg,#43e97b,#38f9d7); }
+.notices { background: linear-gradient(45deg,#fa709a,#fee140); }
+.fees { background: linear-gradient(45deg,#ff9966,#ff5e62); }
+.collection { background: linear-gradient(45deg,#667eea,#764ba2); }
+.syllabus { background: linear-gradient(45deg,#f093fb,#f5576c); }
+
+/* Quick Action Buttons */
+.quick-actions {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.action-btn {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 12px;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+}
+
+.action-icon {
+  font-size: 18px;
+}
+
+/* Charts */
+.chart-card {
+  background: #0f172a;
+}
+
+.chart-container {
+  height: 300px;
+  position: relative;
+}
+
+.activity-card {
+  background: #1e293b;
+}
+
+.activity-card ul {
+  padding-left: 18px;
+}

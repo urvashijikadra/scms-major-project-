@@ -1,1 +1,52 @@
-<p>faculty works!</p>
+<div class="faculty-page">
+  <div class="top-bar">
+    <h2>👨‍🏫 Faculty Management</h2>
+    <button class="add-btn" (click)="openAdd()">+ Add Faculty</button>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Name</th>
+          <th>Subject</th>
+          <th>Experience</th>
+          <th>Email</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let f of facultyList">
+          <td>{{f.id}}</td>
+          <td>{{f.name}}</td>
+          <td>{{f.subject}}</td>
+          <td>{{f.experience}}</td>
+          <td>{{f.email}}</td>
+          <td>
+            <button class="edit-btn" (click)="openEdit(f)">Edit</button>
+            <button class="delete-btn" (click)="delete(f.id)">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal-box">
+    <h3>{{isEdit ? 'Edit Faculty' : 'Add Faculty'}}</h3>
+
+    <input placeholder="Name" [(ngModel)]="faculty.name">
+    <input placeholder="Subject" [(ngModel)]="faculty.subject">
+    <input placeholder="Experience" [(ngModel)]="faculty.experience">
+    <input placeholder="Email" [(ngModel)]="faculty.email">
+
+    <div class="modal-actions">
+      <button class="save-btn" (click)="save()">Save</button>
+      <button class="cancel-btn" (click)="showModal=false">Cancel</button>
+    </div>
+  </div>
+</div>

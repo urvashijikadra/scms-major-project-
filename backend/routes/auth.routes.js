@@ -9,8 +9,43 @@ const SECRET_KEY = "scms_secret_key_2024";
 router.post("/register", async (req, res) => {
   try {
     const { email, password, name, role } = req.body;
+
+    // ✅ Server-side validation
+    if (!email || !password || !name) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    // Validate name format
+    const nameRegex = /^[a-zA-Z\s]+$/;
+    if (!nameRegex.test(name) || name.length < 2 || name.length > 50) {
+      return res.status(400).json({ message: "Name must be 2-50 characters and contain only letters and spaces" });
+    }
+
+    // Validate password length
+    if (password.length < 4) {
+      return res.status(400).json({ message: "Password must be at least 4 characters" });
+    }
+
+    // Check if user already exists
+    const existingUser = await User.findOne({ email: email.toLowerCase() });
+    if (existingUser) {
+      return res.status(400).json({ message: "Email already exists" });
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
-    const user = await User.create({ email, password: hashedPassword, name, role });
+    const user = await User.create({ 
+      email: email.toLowerCase(), 
+      password: hashedPassword, 
+      name, 
+      role 
+    });
+    
     res.json({ message: "User created successfully", success: true });
   } catch (err) {
     res.status(400).json({ message: "Error creating user", error: err.message });
@@ -21,7 +56,19 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ where: { email } });
+
+    // ✅ Server-side validation
+    if (!email || !password) {
+      return res.status(400).json({ message: "Email and password are required" });
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ message: "Invalid email format" });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase() });
    
     if (!user) {
       return res.status(401).json({ message: "Invalid credentials" });
@@ -33,7 +80,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user.id, email: user.email, role: user.role, name: user.name },
+      { id: user._id, email: user.email, role: user.role, name: user.name },
       SECRET_KEY,
       { expiresIn: "24h" }
     );
@@ -41,7 +88,7 @@ router.post("/login", async (req, res) => {
     res.json({
       success: true,
       token,
-      user: { id: user.id, email: user.email, role: user.role, name: user.name }
+      user: { id: user._id, email: user.email, role: user.role, name: user.name }
     });
   } catch (err) {
     res.status(500).json({ message: "Server error", error: err.message });
@@ -65,7 +112,10 @@ const verifyToken = (req, res, next) => {
 // Get current user
 router.get("/me", verifyToken, async (req, res) => {
   try {
-    const user = await User.findByPk(req.user.id, { attributes: { exclude: ['password'] } });
+    const user = await User.findById(req.user.id).select('-password');
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
     res.json(user);
   } catch (err) {
     res.status(500).json({ message: "Server error" });

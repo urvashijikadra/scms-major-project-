@@ -16,7 +16,13 @@
           name="email"
           placeholder="Enter your email"
           required
+          email
+          #emailInput="ngModel"
+          [class.invalid]="emailInput.invalid && emailInput.touched"
         />
+        <small class="validation-hint" *ngIf="emailInput.invalid && emailInput.touched">
+          Please enter a valid email address
+        </small>
       </div>
      
       <div class="form-group">
@@ -28,14 +34,20 @@
           name="password"
           placeholder="Enter your password"
           required
+          minlength="4"
+          #passwordInput="ngModel"
+          [class.invalid]="passwordInput.invalid && passwordInput.touched"
         />
+        <small class="validation-hint" *ngIf="passwordInput.invalid && passwordInput.touched">
+          Password must be at least 4 characters
+        </small>
       </div>
 
       <div class="error-message" *ngIf="error">
         {{ error }}
       </div>
 
-      <button type="submit" class="login-btn" [disabled]="loading">
+      <button type="submit" class="login-btn" [disabled]="loading || !isLoginFormValid()">
         <span *ngIf="!loading">Login</span>
         <span *ngIf="loading">Logging in...</span>
       </button>
@@ -52,7 +64,21 @@
           name="name"
           placeholder="Enter your full name"
           required
+          minlength="2"
+          maxlength="50"
+          pattern="^[a-zA-Z\s]+$"
+          #nameInput="ngModel"
+          [class.invalid]="nameInput.invalid && nameInput.touched"
         />
+        <small class="validation-hint" *ngIf="nameInput.errors?.['required'] && nameInput.touched">
+          Name is required
+        </small>
+        <small class="validation-hint" *ngIf="nameInput.errors?.['minlength'] && nameInput.touched">
+          Name must be at least 2 characters
+        </small>
+        <small class="validation-hint" *ngIf="nameInput.errors?.['pattern'] && nameInput.touched">
+          Name can only contain letters and spaces
+        </small>
       </div>
      
       <div class="form-group">
@@ -64,7 +90,13 @@
           name="email"
           placeholder="Enter your email"
           required
+          email
+          #emailInput="ngModel"
+          [class.invalid]="emailInput.invalid && emailInput.touched"
         />
+        <small class="validation-hint" *ngIf="emailInput.invalid && emailInput.touched">
+          Please enter a valid email address
+        </small>
       </div>
      
       <div class="form-group">
@@ -76,7 +108,23 @@
           name="password"
           placeholder="Enter your password"
           required
+          minlength="4"
+          #passwordInput="ngModel"
+          [class.invalid]="passwordInput.invalid && passwordInput.touched"
         />
+        <small class="validation-hint" *ngIf="passwordInput.invalid && passwordInput.touched">
+          Password must be at least 4 characters
+        </small>
+        <div class="password-strength" *ngIf="password && isSignUp">
+          <div class="strength-bar">
+            <div class="strength-fill" [style.width.%]="getPasswordStrength()"></div>
+          </div>
+          <small [class.strength-weak]="getPasswordStrength() < 50" 
+                 [class.strength-medium]="getPasswordStrength() >= 50 && getPasswordStrength() < 75"
+                 [class.strength-strong]="getPasswordStrength() >= 75">
+            {{ getPasswordStrengthText() }}
+          </small>
+        </div>
       </div>
 
       <div class="error-message" *ngIf="error">
@@ -87,9 +135,10 @@
         {{ successMessage }}
       </div>
 
-      <button type="submit" class="login-btn" [disabled]="loading">
-        <span *ngIf="!loading">Sign Up</span>
+      <button type="submit" class="login-btn" [disabled]="loading || !!successMessage">
         <span *ngIf="loading">Creating account...</span>
+        <span *ngIf="!loading && successMessage">{{ successMessage }}</span>
+        <span *ngIf="!loading && !successMessage">Sign Up</span>
       </button>
     </form>
 
