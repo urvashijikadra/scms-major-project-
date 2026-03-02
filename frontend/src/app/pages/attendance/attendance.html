@@ -1,1 +1,81 @@
-<p>attendance works!</p>
+<div class="attendance-page">
+
+  <h2>📅 Attendance Management</h2>
+
+  <div class="form-box">
+    
+    <select [(ngModel)]="selectedStudentId">
+      <option [ngValue]="0">Select Student</option>
+      <option *ngFor="let s of students" [ngValue]="s.id">
+        {{s.name}}
+      </option>
+    </select>
+
+    <input type="date" [(ngModel)]="selectedDate">
+
+    <select [(ngModel)]="status">
+      <option value="Present">Present</option>
+      <option value="Absent">Absent</option>
+    </select>
+
+    <button (click)="markAttendance()">Mark Attendance</button>
+
+  </div>
+
+  <hr>
+
+  <h3>Attendance Records</h3>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Student</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let r of attendanceRecords; let i = index">
+          <td>{{r.studentName}}</td>
+          <td>{{r.date}}</td>
+          <td>
+            <span [ngClass]="r.status === 'Present' ? 'status-present' : 'status-absent'">
+              {{r.status}}
+            </span>
+          </td>
+          <td>
+            <button class="delete-btn" (click)="deleteRecord(i)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="attendanceRecords.length === 0">
+          <td colspan="4" class="empty-state">
+            <p>No attendance records found. Mark attendance to get started!</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr>
+
+  <h3>Student Attendance Percentage</h3>
+
+  <div class="percentage-container">
+    <div *ngFor="let s of students" class="percentage-item">
+      <span class="student-name">{{s.name}}</span>
+      <span class="percentage-value" 
+            [ngClass]="{'percentage-high': getPercentage(s.id) >= 75, 
+                        'percentage-medium': getPercentage(s.id) >= 50 && getPercentage(s.id) < 75, 
+                        'percentage-low': getPercentage(s.id) < 50}">
+        {{ getPercentage(s.id) }}%
+      </span>
+    </div>
+    <div *ngIf="students.length === 0" class="empty-state">
+      <p>No students available.</p>
+    </div>
+  </div>
+
+</div>

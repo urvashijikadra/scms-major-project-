@@ -1,1 +1,166 @@
-<p>fees works!</p>
+<div class="fees-page">
+
+  <div class="top-bar">
+    <h2>💰 Fees Management</h2>
+    <button class="add-btn" (click)="openAdd()">+ Add Fees</button>
+  </div>
+
+  <div class="summary">
+    <div class="summary-card collected">
+      <div class="label">Total Collected</div>
+      <div class="value">₹{{ totalCollection() }}</div>
+    </div>
+    <div class="summary-card pending">
+      <div class="label">Total Pending</div>
+      <div class="value">₹{{ totalPending() }}</div>
+    </div>
+  </div>
+
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Student</th>
+          <th>Total</th>
+          <th>Paid</th>
+          <th>Pending</th>
+          <th>Status</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr *ngFor="let f of feesList">
+          <td>{{f.id}}</td>
+          <td>{{f.studentName}}</td>
+          <td>₹{{f.total}}</td>
+          <td>₹{{f.paid}}</td>
+          <td>₹{{f.pending}}</td>
+          <td>
+            <span class="status-badge" 
+                  [class.paid]="f.status === 'Paid'"
+                  [class.partial]="f.status === 'Partial'"
+                  [class.not-paid]="f.status === 'Not Paid'">
+              {{f.status}}
+            </span>
+          </td>
+          <td>{{f.date}}</td>
+          <td>
+            <button class="edit-btn" (click)="openEdit(f)">Edit</button>
+            <button class="delete-btn" (click)="deleteFee(f.id)">Delete</button>
+          </td>
+        </tr>
+        <tr *ngIf="feesList.length === 0">
+          <td colspan="8" class="empty-state">
+            <p>No fees records found. Click "Add Fees" to create one.</p>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal">
+  <div class="modal-box">
+
+    <h3>{{isEdit ? 'Edit Fees' : 'Add Fees'}}</h3>
+
+    <!-- Error Message Display -->
+    <div class="error-message" *ngIf="errorMessage">
+      <span class="error-icon">⚠️</span>
+      {{ errorMessage }}
+    </div>
+
+    <!-- Student Selection -->
+    <div class="form-group">
+      <label for="student">Student</label>
+      <select id="student" [(ngModel)]="currentFee.studentId">
+        <option value="0">Select Student</option>
+        <option *ngFor="let s of students" [value]="s.id">
+          {{s.name}}
+        </option>
+      </select>
+    </div>
+
+    <!-- Receipt Number -->
+    <div class="form-group">
+      <label for="receiptNo">Receipt Number</label>
+      <input type="text" id="receiptNo" 
+             [(ngModel)]="currentFee.receiptNo" 
+             placeholder="Auto-generated">
+    </div>
+
+    <!-- Total Fees -->
+    <div class="form-group">
+      <label for="total">Total Fees (₹)</label>
+      <input type="number" id="total" 
+             [(ngModel)]="currentFee.total" 
+             (input)="calculate()"
+             placeholder="Enter total fees amount">
+    </div>
+
+    <!-- Paid Amount -->
+    <div class="form-group">
+      <label for="paid">Paid Amount (₹)</label>
+      <input type="number" id="paid" 
+             [(ngModel)]="currentFee.paid" 
+             (input)="calculate()"
+             placeholder="Enter paid amount">
+    </div>
+
+    <!-- Payment Mode -->
+    <div class="form-group">
+      <label for="paymentMode">Payment Mode</label>
+      <select id="paymentMode" [(ngModel)]="currentFee.paymentMode">
+        <option value="">Select Payment Mode</option>
+        <option value="Cash">Cash</option>
+        <option value="Card">Card</option>
+        <option value="UPI">UPI</option>
+        <option value="Bank Transfer">Bank Transfer</option>
+        <option value="Online Payment">Online Payment</option>
+      </select>
+    </div>
+
+    <!-- Date -->
+    <div class="form-group">
+      <label for="date">Payment Date</label>
+      <input type="date" id="date" [(ngModel)]="currentFee.date">
+    </div>
+
+    <!-- Remarks -->
+    <div class="form-group">
+      <label for="remarks">Remarks / Notes</label>
+      <textarea id="remarks" 
+                [(ngModel)]="currentFee.remarks" 
+                placeholder="Add any additional notes..."
+                rows="2"></textarea>
+    </div>
+
+    <!-- Payment Summary -->
+    <div class="modal-info">
+      <div class="info-row">
+        <span class="info-label">Pending Amount:</span>
+        <span class="info-value pending">₹{{currentFee.pending}}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="info-value" 
+              [class.status-paid]="currentFee.status === 'Paid'"
+              [class.status-partial]="currentFee.status === 'Partial'"
+              [class.status-not-paid]="currentFee.status === 'Not Paid'">
+          {{currentFee.status}}
+        </span>
+      </div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="save-btn" (click)="saveFee()">Save</button>
+      <button class="cancel-btn" (click)="showModal=false">Cancel</button>
+    </div>
+
+  </div>
+</div>

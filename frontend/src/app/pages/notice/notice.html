@@ -1,1 +1,100 @@
-<p>notice works!</p>
+<div class="notice-page">
+
+  <div class="top-bar">
+    <h2>📢 Notice Management</h2>
+    
+    <div class="search-bar">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        placeholder="Search notices..." 
+        [(ngModel)]="searchTerm"
+        (input)="filterNotices()">
+    </div>
+    
+    <button class="add-btn" (click)="openAdd()">+ Add Notice</button>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-state" *ngIf="notices.length === 0">
+    <div class="empty-state-icon">📋</div>
+    <h3>No Notices Yet</h3>
+    <p>Click the "Add Notice" button to create your first notice.</p>
+  </div>
+
+  <!-- No Results State -->
+  <div class="no-results" *ngIf="notices.length > 0 && filteredNotices.length === 0">
+    <h3>No Results Found</h3>
+    <p>Try adjusting your search terms.</p>
+  </div>
+
+  <!-- Notice List -->
+  <div class="notice-list" *ngIf="filteredNotices.length > 0">
+    <div 
+      class="notice-card" 
+      *ngFor="let n of filteredNotices"
+      [class.important]="n.important">
+
+      <div class="notice-header">
+        <h3>
+          {{n.title}}
+          <span *ngIf="n.important" class="star">⭐ Important</span>
+        </h3>
+        <small>{{formatDate(n.date)}}</small>
+      </div>
+
+      <p>{{n.description}}</p>
+
+      <div class="actions">
+        <button class="edit-btn" (click)="openEdit(n)">Edit</button>
+        <button class="delete-btn" (click)="confirmDelete(n)">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" *ngIf="showModal" (click)="closeModalOnOverlay($event)">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+
+    <h3>{{isEdit ? 'Edit Notice' : 'Add Notice'}}</h3>
+
+    <input 
+      type="text" 
+      placeholder="Notice Title" 
+      [(ngModel)]="currentNotice.title">
+    
+    <textarea 
+      placeholder="Notice Description" 
+      [(ngModel)]="currentNotice.description"></textarea>
+    
+    <input 
+      type="date" 
+      [(ngModel)]="currentNotice.date">
+
+    <label class="checkbox">
+      <input type="checkbox" [(ngModel)]="currentNotice.important">
+      <span>Mark as Important</span>
+    </label>
+
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="showModal = false">Cancel</button>
+      <button class="save-btn" (click)="saveNotice()">Save</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal-overlay" *ngIf="showDeleteModal" (click)="showDeleteModal = false">
+  <div class="modal-box" (click)="$event.stopPropagation()">
+    <h3>Delete Notice</h3>
+    <p style="text-align: center; color: #64748b; margin-bottom: 24px;">
+      Are you sure you want to delete "<strong>{{noticeToDelete?.title}}</strong>"?
+    </p>
+    <div class="modal-actions">
+      <button class="cancel-btn" (click)="showDeleteModal = false">Cancel</button>
+      <button class="delete-btn" (click)="deleteNotice()">Delete</button>
+    </div>
+  </div>
+</div>

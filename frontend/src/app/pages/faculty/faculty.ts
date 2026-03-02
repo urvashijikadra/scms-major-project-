@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class Faculty {
 
+  // Faculty List
   facultyList: any[] = [
     { id: 1, name: 'Dr. Mehta', subject: 'Maths', experience: '5 Years', email: 'mehta@mail.com' },
     { id: 2, name: 'Prof. Shah', subject: 'Physics', experience: '8 Years', email: 'shah@mail.com' }
@@ -21,33 +22,60 @@ export class Faculty {
 
   faculty: any = this.emptyFaculty();
 
+  // ----------------------
+  // EMPTY FACULTY
+  // ----------------------
   emptyFaculty(){
-    return { id: null, name:'', subject:'', experience:'', email:'' };
+    return { id: 0, name:'', subject:'', experience:'', email:'' };
   }
 
+  // ----------------------
+  // OPEN ADD
+  // ----------------------
   openAdd(){
     this.isEdit = false;
     this.faculty = this.emptyFaculty();
     this.showModal = true;
   }
 
+  // ----------------------
+  // OPEN EDIT
+  // ----------------------
   openEdit(f:any){
     this.isEdit = true;
     this.faculty = {...f};
     this.showModal = true;
   }
 
+  // ----------------------
+  // SAVE FACULTY
+  // ----------------------
   save(){
+
+    if(!this.faculty.name){
+      alert("Name required");
+      return;
+    }
+
     if(this.isEdit){
+      // UPDATE
       let i = this.facultyList.findIndex(x=>x.id===this.faculty.id);
       this.facultyList[i] = this.faculty;
     }else{
-      this.faculty.id = Date.now();
-      this.facultyList.push(this.faculty);
+      // ADD NEW (SEQUENCE ID)
+      this.faculty.id = this.facultyList.length > 0
+        ? Math.max(...this.facultyList.map(x => x.id)) + 1
+        : 1;
+
+      this.facultyList.push({ ...this.faculty });
     }
+
     this.showModal = false;
   }
 
+  // ----------------------
+  // DELETE
+  // ----------------------
   delete(id:number){
     this.facultyList = this.facultyList.filter(x=>x.id!==id);
   }
